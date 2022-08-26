@@ -15,7 +15,7 @@ export default {
     },
     async auth(context, payload) {
         const mode = payload.mode;
-        let url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAFVMJ1J1VbebCw8ad2Beol1rDMV2ZlaCw`
+        let url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD2V8VE1sLquu4L5JkoNygNow22cG075xo`
 
         if (mode === 'signup') {
             url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD2V8VE1sLquu4L5JkoNygNow22cG075xo`

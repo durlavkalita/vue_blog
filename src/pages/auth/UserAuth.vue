@@ -6,13 +6,6 @@
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
         Sign in to your account
       </h2>
-      <p class="mt-2 text-center text-sm text-gray-600 max-w">
-        Or
-        <!-- space -->
-        <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-          start your 14-day free trial
-        </a>
-      </p>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -52,7 +45,7 @@
             </div>
           </div>
 
-          <div class="flex items-center justify-between">
+          <!-- <div class="flex items-center justify-between">
             <div class="flex items-center">
               <input id="remember_me" name="remember_me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
               <label for="remember_me" class="ml-2 block text-sm text-gray-900">
@@ -65,16 +58,25 @@
                 Forgot your password?
               </a>
             </div>
-          </div>
+          </div> -->
 
           <div>
             <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              Sign in
+              {{submitButtonCaption}}
+            </button>
+          </div>
+          <div>
+            <button 
+            type="button" 
+            class="w-full flex justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            @click="switchAuthMode"
+            >
+              Or try to {{switchModeButtonCaption}}
             </button>
           </div>
         </form>
 
-        <div class="mt-6">
+        <!-- <div class="mt-6">
           <div class="relative">
             <div class="absolute inset-0 flex items-center">
               <div class="w-full border-t border-gray-300"></div>
@@ -114,7 +116,7 @@
               </a>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -130,6 +132,22 @@ export default {
       mode: 'login',
     }
   },
+  computed: {
+    submitButtonCaption() {
+      if (this.mode === 'login') {
+        return 'Login';
+      } else {
+        return 'Signup';
+      }
+    },
+    switchModeButtonCaption() {
+      if (this.mode === 'login') {
+        return 'signup';
+      } else {
+        return 'login';
+      }
+    }
+  },  
   methods: {
     async submitForm() {
       if (this.email === '' || !this.email.includes('@') || this.password.length < 6) {
@@ -137,16 +155,31 @@ export default {
         return;
       }
       try {
-        await this.$store.dispatch('signup', {
+         if (this.mode === 'login') {
+          await this.$store.dispatch('login', {
             email: this.email,
             password: this.password
           });
+        } else {
+          await this.$store.dispatch('signup', {
+            email: this.email,
+            password: this.password
+          });
+        }
+        
         const redirectUrl = '/' + (this.$route.query.redirect || 'posts');
         this.$router.replace(redirectUrl);
       } catch (error) {
         console.log(error);
       }
-    }
+    }, 
+    switchAuthMode() {
+      if (this.mode === 'login') {
+        this.mode = 'signup';
+      } else {
+        this.mode = 'login';
+      }
+    },
   }
 }
 </script>
